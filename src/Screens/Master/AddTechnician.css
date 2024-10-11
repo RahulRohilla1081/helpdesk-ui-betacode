@@ -1,0 +1,46 @@
+.technician-input-container {
+    width: 98%;
+    border-radius: 10px;
+    height: 42vh;
+    background-color: white;
+    justify-content: space-between;
+    margin: 1.5%;
+    padding: 1%;
+  }
+  
+  .technician-sub-input-container {
+    margin: 3%;
+  }
+
+  .technician-inner_div {
+    justify-content: flex-end;
+    display: flex;
+    /* margin-top: 15px; */
+  }
+  
+  .technician-button-style {
+    color: #fff;
+    font-weight: 500;
+    padding: 10px 30px;
+    box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    border-color: #fff;
+    margin-bottom: 2px;
+  }
+  
+  .technician-button-style:hover {
+    transform: scale(1.1);
+    animation-duration: 0.2s;
+    transition: ease;
+  }
+  
+  
+  @media (max-width: 500px) {
+    .technician-input-container {
+      flex-direction: column;
+    }
+    }
+
+.technician-table{
+        margin-top: 5%;
+      }

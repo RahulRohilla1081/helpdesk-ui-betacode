@@ -1,0 +1,123 @@
+/* .sub-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px;
+} */
+
+/* .card-1 {
+    background-image: linear-gradient(135deg, #FBF3D5 10%, #ad6f46 100%);
+}
+
+.card-2{
+  background-image: linear-gradient(135deg, #bababa 10%, #9857c4 100%);
+}
+
+.card-3{
+  background-image: linear-gradient(135deg, #85D8CE 10%, #32446c 100%); 
+}
+
+.card-4{
+  background-image: linear-gradient(135deg, #d0cef7 10%, #3b34b7 100%);
+}
+
+.card-5{
+  background-image: linear-gradient(135deg, #efe7ba 10%, #30454c 100%); 
+} */
+/* 
+.card-1 {
+  background-image: linear-gradient(135deg, #dcf2cc 100%, #dcf2cc 100%);
+}
+
+.card-2 {
+  background-image: linear-gradient(135deg, #e0bdf7 100%, #e0bdf7 100%);
+}
+
+.card-3 {
+  background-image: linear-gradient(135deg, #cdd7dd 100%, #cdd7dd 100%);
+}
+
+.card-4 {
+  background-image: linear-gradient(135deg, #d2cffe 100%, #d2cffe 100%);
+}
+
+.card-5 {
+  background-image: linear-gradient(135deg, #a9dff1 100%, #a9dff1 100%);
+}
+
+.card-6 {
+  background-image: linear-gradient(135deg, #f7dfdf 100%, #f7dfdf 100%);
+}
+
+.card-7 {
+  background-image: linear-gradient(135deg, #bdcd95 100%, #bdcd95 100%);
+}
+
+.card-8 {
+  background-image: linear-gradient(135deg, #e5d8c1 100%, #e5d8c1 100%);
+}
+
+.card-9 {
+  background-image: linear-gradient(135deg, #d7a1b2 100%, #d7a1b2 100%);
+}
+
+.card-10 {
+  background-image: linear-gradient(135deg, #dddddd 100%, #dddddd 100%);
+}
+
+.Newcard {
+  width: 9%;
+  height: 60px;
+  margin: 3px;
+  padding: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+  .Newcard {
+    height: 80px;
+    margin: 3px;
+  }
+}
+
+.Newcard:hover {
+  box-shadow: 0 8px 10px 0 black;
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 gray;
+  transition: all 0.3s;
+}
+
+.card-design {
+  text-align: center;
+  font-weight: "bolder";
+  align-self: center;
+  margin: 0px;
+}
+
+.number-count {
+  color: white;
+  font-size: 0.5rem;
+  margin: 0px;
+}
+
+.card-content {
+  text-align: center;
+  color: white;
+  font-size: "0.9rem";
+  font-weight: bolder;
+  margin: 0px;
+}
+
+@media (max-width: 768px) {
+  .card-design {
+    flex-direction: row;
+    height: auto;
+    font-size: 16px;
+  }
+
+  .number-count {
+    font-size: 1rem;
+  }
+
+  .card-content {
+    font-size: 0.2rem;
+  }
+} */

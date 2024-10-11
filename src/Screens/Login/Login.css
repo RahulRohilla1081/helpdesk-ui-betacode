@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap");
+
+.login-main-container {
+  /* background: radial-gradient(71.18% 102.7% at 65.84% 43.38%, #A8E6F5 0%, #43ABC4 100%); */
+  height: 100vh;
+  display: flex;
+}
+
+.sub-left-container {
+  width: 35%;
+  background-color: #fff;
+  filter: drop-shadow(6px 18px 60px rgba(13, 80, 96, 0.25));
+  border-radius: 0px 30px 30px 0px;
+  margin-top: 5%;
+  margin-bottom: 4%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.sub-right-container {
+  width: 55%;
+  margin-top: 6%;
+  margin-left: 20vh;
+}
+
+.login-samishti-logo {
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  margin-right: 2vh;
+  margin-top: 5vh;
+  margin-bottom: 4vh;
+}
+
+.login-header-text {
+  font-size: 26px;
+  margin-bottom: 0px;
+}
+
+.raleway-font {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: #086b8f;
+}
+
+.login-input-div {
+  padding-bottom: 25px;
+}
+
+.login-inputbox {
+  border-color: #fff;
+  text-decoration: none;
+  background-color: #fff;
+}
+
+.login-left-inner-container {
+  /* margin-left: 50px; */
+  /* margin-right: 20px; */
+  padding-right: 20px;
+  padding-left: 20px;
+  width: 100%;
+}
+
+.btn-style {
+  display: flex;
+  justify-content: space-around;
+  /* width: 1%; */
+}
+
+.login-signup-button {
+  font-family: poppins;
+  font-size: 16px;
+  color: white;
+  /* min-width: 140px;
+    min-height: 48px; */
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  /* background-image: linear-gradient(to right, #23b2d5, #219bcc); */
+  background-color: #219bcc;
+  margin-top: 40px;
+  min-width: 100%;
+  min-height: 48px;
+  text-align: center;
+  justify-content: center;
+}
+
+.login-signup-button .span-1 {
+  display: block;
+  /* margin-left: 3.3em; */
+  transition: all 0.3s ease-in-out;
+}
+
+.login-signup-button .span-2 {
+  display: block;
+  /* margin-left: 1em; */
+  transition: all 0.3s ease-in-out;
+}
+
+.login-signup-button:active {
+  transform: scale(0.95);
+}
+
+.login-forgot-password-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.login-forgot-password-text {
+  color: #33acd1;
+  cursor: pointer;
+  margin: 0px;
+}
+
+/* Mobile View CSS */
+@media (max-width: 768px) {
+  .login-main-container {
+    flex-direction: column; /* Stack elements vertically */
+    padding: 20px; /* Add padding for better spacing */
+    align-items: center; /* Center items horizontally */
+  }
+
+  .sub-left-container {
+    width: 100%; /* Full width for smaller screens */
+    border-radius: 30px; /* Adjust border-radius for a more rounded look */
+    margin: 0; /* Remove top and bottom margin */
+    box-shadow: 0 4px 10px rgba(13, 80, 96, 0.25); /* Adjust shadow */
+  }
+
+  .sub-right-container {
+    width: 100%; /* Full width for smaller screens */
+    margin: 20px 0; /* Add margin for spacing */
+  }
+
+  .login-samishti-logo {
+    display: flex;
+    justify-content: center;
+    /* margin-top: 20px;  */
+    /* margin-bottom: 10px; */
+  }
+
+  .login-header-text {
+    font-size: 22px; /* Reduce font size for smaller screens */
+  }
+
+  .login-input-div {
+    padding-bottom: 15px; /* Adjust padding for input area */
+  }
+
+  .login-signup-button {
+    min-width: 10px; /* Reduce button width */
+    min-height: 40px; /* Reduce button height */
+    margin-top: 40px; /* Adjust top margin */
+  }
+
+  .login-forgot-password-container {
+    justify-content: center; /* Center the forgot password link */
+    margin-top: 20px; /* Adjust top margin */
+  }
+}
+
+.otp-form-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.otp-inputbar {
+  width: 30px;
+  height: 50px;
+  border-radius: 20px;
+  text-align: center;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.margin-align {
+  margin-top: 8%;
+  margin-bottom: 3%;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 17px;
+}
+
+#verify-btn {
+  cursor: pointer;
+  display: inline-block;
+  align-content: flex-end;
+  margin-top: 30px;
+  background: #589bca;
+  color: white;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  border: none;
+  width: 35%;
+}
+
+.login-right-container {
+  min-width: 65vw;
+
+  background: url("../../assets/IMAGES/supportdesk-login-illustration.svg")
+      right bottom no-repeat,
+    url("../../assets/IMAGES/loginBg.svg") left top repeat;
+}

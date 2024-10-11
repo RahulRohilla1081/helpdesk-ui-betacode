@@ -1,0 +1,49 @@
+AddProjectManager.css .manager-input-container {
+  border-radius: 10px;
+  width: 98%;
+  height: 25vh;
+  display: flex;
+  background-color: white;
+  /* border-radius: 1rem; */
+  /* background: linear-gradient(45deg, #c5c5c5 0%, #ffffff 100%); */
+  padding: 0.3rem;
+  /* margin-left: 25px; */
+  justify-content: space-between;
+}
+
+.manager-table {
+  margin-top: 20%;
+}
+
+.manager-inner_div {
+  justify-content: flex-end;
+  display: flex;
+  /* margin-top: 15px; */
+}
+
+.manager-button-style {
+  color: #fff;
+  font-weight: 500;
+  padding: 10px 30px;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  border-color: #fff;
+}
+
+.manager-button-style:hover {
+  transform: scale(1.1);
+  animation-duration: 0.2s;
+  transition: ease;
+}
+
+@media (max-width: 500px) {
+  .manager-input-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .manager-input-container {
+    flex-direction: column;
+  }
+}

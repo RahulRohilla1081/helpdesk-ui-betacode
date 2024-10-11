@@ -1,0 +1,40 @@
+.approver-input-container {
+  border-radius: 10px;
+  width: 98%;
+  min-height: 25vh;
+  display: flex;
+  background-color: white;
+  padding: 1%;
+  justify-content: space-between;
+}
+
+@media (max-width: 500px) {
+  .approver-input-container {
+    flex-direction: column;
+  }
+}
+
+.approver-table {
+  margin-top: 50%;
+}
+
+.approver-inner_div {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.approver-button-style {
+  color: #fff;
+  font-weight: 500;
+  padding: 10px 30px;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  border-color: #fff;
+  margin-bottom: 2px;
+}
+
+.approver-button-style:hover {
+  transform: scale(1.1);
+  animation-duration: 0.2s;
+  transition: ease;
+}

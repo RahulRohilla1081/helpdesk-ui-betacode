@@ -1,0 +1,118 @@
+.log-page-content{
+    /* margin: 5px; */
+    height: 100%;
+}
+
+/* .log-container{
+    height: 100vh;
+} */
+
+.log-header{
+    font-size: x-large;
+    text-align: center;
+    color: #126aae;
+}
+
+.log-fieldset{
+    border: none;
+}
+
+.log-inputbox{
+    display: block;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.log-inputbox[type="radio"],
+.log-inputbox[type="checkbox"] {
+    display: inline;
+    width: 5%;
+}
+.negative-margin{
+    margin-bottom: -10px;
+}
+
+
+.radio-inputbox{
+    justify-content: flex-start;
+    width: 5%;
+
+}
+.log-label {
+    font-size: 15px;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+
+.log-button{
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: #126aae;
+    width: 40%;
+    font-size: 16px;
+}
+
+.log-textarea{
+    resize: none;
+    width: 98%;
+    min-height: 50px;
+    max-height: 60px;
+}
+
+.set-label-input{
+    display: flex;
+}
+
+.log-select {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.signup-button {
+  font-family: poppins;
+  font-size: 14px;
+  /* background: royalblue; */
+  color: white;
+  max-width: 90px;
+  /* max-height: 48px; */
+  text-align: center;
+  /* padding: 0.7em 1em; */
+  /* padding-left: 0.9em; */
+  display: flex;
+  justify-content: "center";
+  align-items: center;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  background-image: linear-gradient(to right, #23b2d5, #219bcc);
+  /* padding: 10px; */
+}
+
+.error-text-field{
+    color:red;
+    /* font-size: 30px; */
+
+
+}
+.required-filed{
+    color:red;
+}

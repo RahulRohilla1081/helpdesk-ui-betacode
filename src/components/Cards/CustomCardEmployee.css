@@ -1,0 +1,117 @@
+.sub-container {
+  display: flex;
+  justify-content: flex-start;
+  /* margin: 5px; */
+  gap: 10px;
+  margin-left: 13px;
+  margin-right: 13px;
+}
+
+.Empcard {
+  width: 12%;
+  height: fit-content;
+  /* margin-top: 15px; */
+  max-height: 40px;
+  padding-top: 8px;
+  margin: 3px;
+  /* padding: 0px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:"#fff"
+}
+
+
+/* .Empcard-1{
+  background-image: linear-gradient(135deg, #FFD3A5 10%, #FD6585 90%);
+  }
+ 
+  .Empcard-2{
+  background-image: linear-gradient(135deg, #85D8CE 10%, #3E517A 90%);
+  }
+ 
+ 
+  .Empcard-3{
+  background-image: linear-gradient(135deg, #d6d5ed 10%, #191654 90%);
+  }
+  .Empcard-4{
+  background-image: linear-gradient(135deg, #919da3 10%, #31434b 90%);
+  }
+  .Empcard-5{
+  background-image: linear-gradient(135deg, #f7c8f6 10%, #8A2387 90%);
+  }
+  .Empcard-6{
+  background-image: linear-gradient(135deg, #f9eabd 10%, #f1c232 90%);
+  } */
+
+.Empcard-1 {
+  /* background-image: linear-gradient(135deg, #23b2d5 100%, #219bcc 100%); */
+    background-image: linear-gradient(to right, #23b2d5, #219bcc);
+    background-color: #219bcc;
+    color:"#fff"
+}
+
+  .Empcard-7{
+  background-image: linear-gradient(135deg, #fff 0%, #85D8CE 0%);
+  }
+
+.Empcard-2 {
+  background-image: linear-gradient(135deg, #e0bdf7 100%, #e0bdf7 100%);
+}
+
+.Empcard-3 {
+  background-image: linear-gradient(135deg, #cdd7dd 100%, #cdd7dd 100%);
+}
+
+.Empcard-4 {
+  background-image: linear-gradient(135deg, #d2cffe 100%, #d2cffe 100%);
+}
+
+.Empcard-5 {
+  background-image: linear-gradient(135deg, #a9dff1 100%, #a9dff1 100%);
+}
+
+.Empcard-6 {
+  background-image: linear-gradient(135deg, #f7dfdf 100%, #f7dfdf 100%);
+}
+
+.Empcard:hover {
+  box-shadow: 0 8px 10px 0 black;
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 gray;
+  transition: all 0.3s;
+}
+
+.card-content {
+  text-align: center;
+  color: white;
+  font-size: "0.9rem";
+  font-weight: bolder;
+  margin: 0px;
+}
+
+.card-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.card-design {
+  text-align: center;
+  font-weight: "bolder";
+  align-self: center;
+  margin: 0px;
+}
+
+.number-count {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0px;
+}
+
+@media (max-width: 768px) {
+  .card-design {
+    flex-direction: row;
+    height: auto;
+    font-size: 16px;
+  }
+}
