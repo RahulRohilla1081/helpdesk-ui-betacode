@@ -1,5 +1,5 @@
-const defaultPort = "http://localhost:7001/"; //dev
-// const defaultPort = "https://support.samishti.com:4001/"; //prod
+// const defaultPort = "http://localhost:7001/"; //dev
+const defaultPort = "https://support.samishti.com:7001/"; //prod
 const imageUrl = "Support_Portal_api/images/";
 const clientLogin = "Support_Portal_api/login/login";
 const empLogin = "Support_Portal_api/login/empLogin?EMP_ID=";
