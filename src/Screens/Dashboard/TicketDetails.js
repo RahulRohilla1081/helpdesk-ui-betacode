@@ -2224,8 +2224,8 @@ function TicketDetails(props) {
                     {thisTicket.SUB_CATEGORY_NAME}
                   </Typography>
                 </div>
-                <Divider />
-                <div className="form-details">
+                {/* <Divider /> */}
+                {/* <div className="form-details">
                   <Typography
                     className="typo-label-box"
                     sx={{
@@ -2248,7 +2248,7 @@ function TicketDetails(props) {
                   >
                     {thisTicket.ITEM_NAME}{" "}
                   </Typography>
-                </div>
+                </div> */}
                 <Divider />
                 <div className="form-details">
                   <Typography
@@ -4126,7 +4126,7 @@ function TicketDetails(props) {
               }
             }}
           />
-          <label className="modal-label">Item </label>
+          {/* <label className="modal-label">Item </label>
           <Select
             id={"selectItem2"}
             options={itemOptions}
@@ -4142,7 +4142,7 @@ function TicketDetails(props) {
                 ITEMS: false,
               }));
             }}
-          />
+          /> */}
 
           <div className="row">
             <div className="col-md-10">
