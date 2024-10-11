@@ -1323,7 +1323,9 @@ function TicketDetails(props) {
       });
   };
   const [RequiredFields, setRequiredFields] = useState([]);
-
+useEffect(()=>{
+  console.log("jefjwkef",thisTicket);
+},[])
   useEffect(() => {
     if (Number(selectedOption) == 1) {
       let tempFields = [];
