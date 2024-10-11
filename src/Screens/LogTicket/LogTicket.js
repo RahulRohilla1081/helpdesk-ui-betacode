@@ -294,9 +294,9 @@ function LogTicket(props) {
         {
           FIELD_NAME: "PRIORITY",
         },
-        {
-          FIELD_NAME: "ITEMS",
-        },
+        // {
+        //   FIELD_NAME: "ITEMS",
+        // },
         {
           FIELD_NAME: "SUBJECT",
         },
@@ -338,9 +338,9 @@ function LogTicket(props) {
         {
           FIELD_NAME: "PRIORITY",
         },
-        {
-          FIELD_NAME: "ITEMS",
-        },
+        // {
+        //   FIELD_NAME: "ITEMS",
+        // },
         {
           FIELD_NAME: "SUBJECT",
         },
@@ -398,9 +398,9 @@ function LogTicket(props) {
         {
           FIELD_NAME: "PRIORITY",
         },
-        {
-          FIELD_NAME: "ITEMS",
-        },
+        // {
+        //   FIELD_NAME: "ITEMS",
+        // },
         {
           FIELD_NAME: "SUBJECT",
         },
