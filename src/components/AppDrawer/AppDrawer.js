@@ -345,7 +345,6 @@ function AppDrawerEmployee(props) {
         icon: <AssessmentIcon />,
         path: ADD_EMPLOYEES,
         SHOW:
-        
           props.LOGGED_IN_DATA.USER_TYPE?.includes(6) &&
           props.LOGGED_IN_DATA.LOGGED_IN_AS == "EMPLOYEE"
             ? true
@@ -484,6 +483,7 @@ function AppDrawerEmployee(props) {
                                 <div
                                   className="drawer-sub-item active"
                                   onClick={() => {
+                                    console.log("checking CI/CD");
                                     navigate(innerVal.sub_path);
                                     props.toggleDrawer(false);
                                   }}

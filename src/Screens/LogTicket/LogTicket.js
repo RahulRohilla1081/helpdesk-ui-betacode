@@ -1002,45 +1002,7 @@ console.log("submit called")
         <>
           <Row>
             {/* First Column (Left) */}
-            <Col lg="3">
-              <div className="">
-                <Label for="basicpill-email-input4" className="modal-label">
-                  Item<span className="required-filed">*</span>
-                </Label>
-                <CustomSelect
-                  id={"selectItem2"}
-                  options={itemOptions}
-                  value={allItems.find((val) => val.value == formData.ITEMS)}
-                  onChange={(e) => {
-                    setSelectedSubCat(e.value);
-                    setFormData((prev) => ({
-                      ...prev,
-                      ITEMS: e.value,
-                    }));
-                    setFormDataErrorFlag((prev) => ({
-                      ...prev,
-                      ITEMS: false,
-                    }));
-                  }}
-                />
-                {formDataErrorFlag.ITEMS && (
-                  <p className="error-text-field">Please select Item</p>
-                )}
-
-                {/* <Input
-                  type="select"
-                  name="ITEM"
-                  className="form-control"
-                  id="basicpill-email-input4"
-                  value={formData.ITEMS}
-                  onChange={(e) => handleInputChange(e, "ITEMS")}
-                >
-                  <option value="">Select Item</option>
-                  <option value="WEB">WEB</option>
-                  <option value="MOBILE">MOBILE</option>
-                </Input> */}
-              </div>
-            </Col>
+           
             <Col lg="3">
               <div className="">
                 <Label for="basicpill-email-input4" className="modal-label">
@@ -1254,44 +1216,7 @@ console.log("submit called")
         <>
           <Row>
             {/* First Column (Left) */}
-            <Col lg="3">
-              <div className="">
-                <Label for="basicpill-email-input4" className="modal-label">
-                  Item<span className="required-filed">*</span>
-                </Label>
-                <CustomSelect
-                  id={"selectItem3"}
-                  options={itemOptions}
-                  value={allItems.find((val) => val.value == formData.ITEMS)}
-                  onChange={(e) => {
-                    setSelectedSubCat(e.value);
-                    setFormData((prev) => ({
-                      ...prev,
-                      ITEMS: e.value,
-                    }));
-                    setFormDataErrorFlag((prev) => ({
-                      ...prev,
-                      ITEMS: false,
-                    }));
-                  }}
-                />
-                {formDataErrorFlag?.ITEMS && (
-                  <p className="error-text-field">Please select item</p>
-                )}
-                {/* <Input
-                  type="select"
-                  name="ITEM"
-                  className="form-control"
-                  id="basicpill-email-input4"
-                  value={formData.ITEMS}
-                  onChange={(e) => handleInputChange(e, "ITEMS")}
-                >
-                  <option value="">Select Item</option>
-                  <option value="WEB">WEB</option>
-                  <option value="MOBILE">MOBILE</option>
-                </Input> */}
-              </div>
-            </Col>
+            
             <Col lg="3">
               <div className="">
                 <Label for="basicpill-email-input4" className="modal-label">
