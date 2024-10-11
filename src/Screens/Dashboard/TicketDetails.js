@@ -669,7 +669,7 @@ function TicketDetails(props) {
       pendingWith.push(approverData.APPROVER2);
     }
     if (thisTicket.CREATED_BY_TYPE == "EMPLOYEE") {
-      pendingWith.push([thisClient.PROJECT_MANAGER]);
+      pendingWith.push(thisClient.PROJECT_MANAGER);
     }
 
     if (
