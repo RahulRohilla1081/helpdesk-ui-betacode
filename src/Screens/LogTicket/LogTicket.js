@@ -544,7 +544,7 @@ function LogTicket(props) {
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
-
+console.log("submit called")
     let tempErrorsData = {};
 
     RequiredFields.map((val) => {
@@ -862,7 +862,7 @@ function LogTicket(props) {
         <>
           <Row>
             {/* First Column (Left) */}
-            <Col lg="3">
+            {/* <Col lg="3">
               <div className="">
                 <Label for="basicpill-email-input4" className="modal-label">
                   Item<span className="required-filed">*</span>
@@ -887,20 +887,9 @@ function LogTicket(props) {
                   <p className="error-text-field">Please select item</p>
                 )}
 
-                {/* <Input
-                  type="select"
-                  name="ITEM"
-                  className="form-control"
-                  id="basicpill-email-input4"
-                  value={formData.ITEMS}
-                  onChange={(e) => handleInputChange(e, "ITEMS")}
-                >
-                  <option value="">Select Item</option>
-                  <option value="WEB">WEB</option>
-                  <option value="MOBILE">MOBILE</option>
-                </Input> */}
+             
               </div>
-            </Col>
+            </Col> */}
             <Col lg="3">
               <div>
                 <Label for="basicpill-email-input4" className="modal-label">
@@ -2324,6 +2313,7 @@ function LogTicket(props) {
                 type="submit"
                 value="Submit"
                 onClick={() => {
+                  console.log("inside onclick");
                   handleSubmit();
                 }}
               />
