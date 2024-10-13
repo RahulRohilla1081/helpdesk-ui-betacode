@@ -24,10 +24,9 @@ function Login(props) {
 
   useEffect(() => {
     let stateData = localStorage.getItem("SUPPORT_DATA");
-  
 
     if (stateData) {
-        stateData = JSON.parse(stateData);
+      stateData = JSON.parse(stateData);
       if (stateData.LOGGED_IN_AS == "USER") {
         navigate(DASHBOARD);
       } else if (stateData.LOGGED_IN_AS == "EMPLOYEE") {
@@ -276,7 +275,7 @@ function Login(props) {
         }}
       >
         <div className="login-samishti-logo">
-          <img height={40} width={180} src={SAMISHTILOGO} />
+          <img height={55} width={180} src={SAMISHTILOGO} />
         </div>
         <div className="login-left-inner-container">
           <h2 className="login-header-text raleway-font"> Hello there! 👋</h2>
