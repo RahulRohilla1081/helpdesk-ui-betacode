@@ -404,8 +404,8 @@ function AppDrawerEmployee(props) {
           <img
             src={IMAGES.samishti_logo}
             style={{
-              width: 53,
-              height: 50,
+              width: 73,
+              height: 80,
             }}
           />
           {props.LOGGED_IN_DATA?.COMPANY_LOGO ? (
