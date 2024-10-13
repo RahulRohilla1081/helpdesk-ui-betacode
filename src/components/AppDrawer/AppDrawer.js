@@ -345,7 +345,8 @@ function AppDrawerEmployee(props) {
         icon: <AssessmentIcon />,
         path: ADD_EMPLOYEES,
         SHOW:
-          props.LOGGED_IN_DATA.USER_TYPE?.includes(6) &&
+          (props.LOGGED_IN_DATA.USER_TYPE?.includes(0) ||
+            props.LOGGED_IN_DATA.USER_TYPE?.includes(6)) &&
           props.LOGGED_IN_DATA.LOGGED_IN_AS == "EMPLOYEE"
             ? true
             : false,
