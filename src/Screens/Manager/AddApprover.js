@@ -221,7 +221,7 @@ function AddApprover(props) {
                 }
               });
 
-              console.log("ASdasdhsadsa", temp);
+              console.log("ASdasdhsadsa", temp, Options);
 
               setAllClientsOptions(Options);
               setAllClients(temp);
@@ -408,7 +408,7 @@ function AddApprover(props) {
         <div className="col-md-4">
           <Label className="modal-label" for="basicpill-email-input4">
             Category Name<span className="required-filed">*</span>
-            {JSON.stringify(formData.CATEGORY)}
+         
           </Label>
           <CustomSelect
             options={CategoryData}

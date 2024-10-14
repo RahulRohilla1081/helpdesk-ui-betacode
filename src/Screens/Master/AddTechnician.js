@@ -44,7 +44,7 @@ function AddTechnician() {
   const [ClientData, setClientData] = useState([]);
   const [SelectedEmployees, setSelectedEmployees] = useState(null);
 
-  const [selectedOption, setSelectedOption] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("2");
   const [CategoryData, setCategoryData] = useState([]);
   const [SubCategoryData, setSubCategoryData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -69,6 +69,7 @@ function AddTechnician() {
     CATEGORY_ID: "",
     SUB_CATEGORY_ID: "",
     EMP_ID: "",
+    SME: false,
   });
 
   const [ClickedRowData, setClickedRowData] = useState(null);
@@ -168,6 +169,7 @@ function AddTechnician() {
         CATEGORY_ID: technicianData?.CATEGORY_ID?.value,
         SUBCATEGORY_ID: technicianData.SUB_CATEGORY_ID.value,
         EMP_ID: technicianData.EMP_ID.value,
+        SME: technicianData.SME,
       };
 
       axios

@@ -3303,14 +3303,16 @@ useEffect(()=>{
                       </button>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      width: "99%",
-                      height: 5,
-                      // backgroundColor: "#2d344b",
-                    }}
-                    className="ticket-details-headers"
-                  />
+                  {thisTicket.EFFORTS == undefined && (
+                    <div
+                      style={{
+                        width: "99%",
+                        height: 5,
+                        // backgroundColor: "#2d344b",
+                      }}
+                      className="ticket-details-headers"
+                    />
+                  )}
                 </div>
               )
           }
