@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MainScreen from "../../components/AppDrawer/MainScreen";
-import { TICKET_STATUS_REPORT } from "../../Utils/Routes";
+import { TICKET_STATUS_REPORT, UNASSIGNED } from "../../Utils/Routes";
 import { Label } from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
@@ -13,8 +13,52 @@ import ReactDataTable from "../../components/ReactDataTable/ReactDataTable";
 import toast, { Toaster } from "react-hot-toast";
 import { saveAs } from "file-saver";
 import { Table, TableBody, TableContainer, TableHead } from "@mui/material";
+import { Bar, Doughnut, Pie } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Card, CardContent, CircularProgress } from "@mui/material";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
+import DateRangePickerComponent from "../../components/DateRangePicker/DateRangePicker";
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  ArcElement,
+  ChartDataLabels
+);
 
 function TktStatusReport(props) {
+  const tktStatusModuleWise = useRef(null); // Create a reference to the chart
+  const lastTwoWeekAcmlishmnt = useRef(null); // Create a reference to the chart
+  const upcomingTasks = useRef(null); // Create a reference to the chart
+
+  const downloadChart = (ref) => {
+    const chart = ref.current; // Get the chart instance
+    if (chart) {
+      const url = chart.toBase64Image(); // Convert the chart to a Base64 image
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "chart.png"; // Set the download filename
+      link.click(); // Trigger the download
+    }
+  };
+
+  const [GraphDateRange, setGraphDateRange] = useState({
+    START_DATE: null,
+    END_DATE: null,
+  });
+
+  console.log("ASdahbdjhasdas", GraphDateRange);
+
   const [formData, setFormData] = useState({
     CLIENT_ID: "",
     CLIENT_ID_ERROR: false,
@@ -23,6 +67,242 @@ function TktStatusReport(props) {
     END_DATE: "",
     END_DATE_ERROR: false,
   });
+
+  const [tktStatusModuleWiseTBody, setTktStatusModuleWiseTbody] = useState({
+    NEW_REQUIREMENT: [],
+    CHANGE_REQUIREMENT: [],
+    SERVICE_REQUIREMENT: [],
+    LABELS: [],
+  });
+  const [tktResolveClosedTbody, setTktResolveClosedTbody] = useState({
+    RESOLVED: [],
+    CLOSED: [],
+
+    LABELS: [],
+  });
+  const [upComingTaskTbody, setUpComingTaskTbody] = useState({
+    UNDER_PROCESS_BY_SAMISHTI: [],
+    CUSTOMER_ACTION: [],
+    UNASSIGNED: [],
+
+    LABELS: [],
+  });
+  useEffect(() => {
+    getGraphsData();
+  }, [GraphDateRange]);
+
+  const getGraphsData = () => {
+    axios
+      .get(
+        ` ${AXIOS.defaultPort + AXIOS.ticketsStatusModuleWise}start_date=${
+          GraphDateRange.START_DATE
+        }&end_date=${GraphDateRange.END_DATE}`
+      )
+      .then((response) => {
+        let temp = response.data;
+
+        let TktStatusModuleNew = [];
+        let TktResolveClosed = [];
+        let UpComingTkt = [];
+        temp.map((val) => {
+          TktResolveClosed.push({
+            SUB_CATEGORY: val.SUB_CATEGORY,
+            SUB_CATEGORY_NAME: val.SUB_CATEGORY_NAME,
+            RESOLVED:
+              val.NEW_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "2") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.CHANGE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "2") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.SERVICE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "2") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0),
+            CLOSED:
+              val.NEW_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "4") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.CHANGE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "4") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.SERVICE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "4") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0),
+          });
+          UpComingTkt.push({
+            SUB_CATEGORY: val.SUB_CATEGORY,
+            SUB_CATEGORY_NAME: val.SUB_CATEGORY_NAME,
+            UNDER_PROCESS_BY_SAMISHTI:
+              val.NEW_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "5") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.CHANGE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "5") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.SERVICE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "5") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0),
+            UNASSIGNED:
+              val.NEW_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "0") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.CHANGE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "0") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.SERVICE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "0") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0),
+            CUSTOMER_ACTION:
+              val.NEW_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "12") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.CHANGE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "12") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0) +
+              val.SERVICE_REQUIREMENT.reduce((acc, obj) => {
+                if (obj.STATUS == "12") {
+                  return acc + obj.COUNT;
+                } else {
+                  return acc;
+                }
+              }, 0),
+          });
+
+          TktStatusModuleNew.push({
+            SUB_CATEGORY: val.SUB_CATEGORY,
+            SUB_CATEGORY_NAME: val.SUB_CATEGORY_NAME,
+            NEW_REQUIREMENT: val.NEW_REQUIREMENT.reduce(
+              (acc, obj) => acc + obj.COUNT,
+              0
+            ),
+            CHANGE_REQUIREMENT: val.CHANGE_REQUIREMENT.reduce(
+              (acc, obj) => acc + obj.COUNT,
+              0
+            ),
+            SERVICE_REQUIREMENT: val.SERVICE_REQUIREMENT.reduce(
+              (acc, obj) => acc + obj.COUNT,
+              0
+            ),
+          });
+        });
+
+        console.log("ASdasjdnjaskd", TktResolveClosed);
+
+        setTktStatusModuleWiseTbody({
+          NEW_REQUIREMENT: TktStatusModuleNew.map((item, index) => {
+            return item?.NEW_REQUIREMENT;
+          }),
+          CHANGE_REQUIREMENT: TktStatusModuleNew.map((item, index) => {
+            return item?.CHANGE_REQUIREMENT;
+          }),
+          SERVICE_REQUIREMENT: TktStatusModuleNew.map((item, index) => {
+            return item?.SERVICE_REQUIREMENT;
+          }),
+          LABELS: TktStatusModuleNew.map((item, index) => {
+            return item?.SUB_CATEGORY_NAME;
+          }),
+        });
+        setTktResolveClosedTbody({
+          RESOLVED: TktResolveClosed.map((item, index) => {
+            return item?.RESOLVED;
+          }),
+          CLOSED: TktResolveClosed.map((item, index) => {
+            return item?.CLOSED;
+          }),
+          LABELS: TktResolveClosed.map((item, index) => {
+            return item?.SUB_CATEGORY_NAME;
+          }),
+        });
+        setUpComingTaskTbody({
+          UNASSIGNED: UpComingTkt.map((item, index) => {
+            return item?.UNASSIGNED;
+          }),
+          UNDER_PROCESS_BY_SAMISHTI: UpComingTkt.map((item, index) => {
+            return item?.UNDER_PROCESS_BY_SAMISHTI;
+          }),
+          CUSTOMER_ACTION: UpComingTkt.map((item, index) => {
+            return item?.CUSTOMER_ACTION;
+          }),
+          LABELS: UpComingTkt.map((item, index) => {
+            return item?.SUB_CATEGORY_NAME;
+          }),
+        });
+      });
+  };
+  let statusFlag = [
+    { flag: 0, value: "Unassigned" },
+    { flag: 1, value: "TR Movement Pending" },
+    { flag: 2, value: "Resolved" },
+    { flag: 3, value: "Client Approval Pndg" },
+    { flag: 4, value: "Closed" },
+    { flag: 5, value: "Under Process by Samishti" },
+    { flag: 6, value: "On Hold" },
+    { flag: 7, value: "Effort Approval Pndg" },
+    { flag: 8, value: "Appr Pndg" },
+    { flag: 9, value: "TR Approval Pending" },
+    { flag: 10, value: "Ticket Rejected" },
+    { flag: 11, value: "Proposed Soln." },
+    { flag: 12, value: "Cust. Action" },
+    { flag: 13, value: "TR to SAP" },
+  ];
+
+  const barGraphLabels = statusFlag.map((val) => val.value);
 
   const convertIndianStandardIntoYMD = (date) => {
     var date = new Date(date),
@@ -40,7 +320,6 @@ function TktStatusReport(props) {
 
   const getTicketStatusData = () => {
     let tempFormData = { ...formData };
-
     let ErrorFoundFlag = false;
     Object.keys(tempFormData).map((key, colIndex) => {
       if (typeof tempFormData[key] != "boolean") {
@@ -50,7 +329,6 @@ function TktStatusReport(props) {
         }
       }
     });
-
     let timeDiff = new Date(formData.START_DATE) - new Date(formData.END_DATE);
     if (timeDiff > 0) {
       toast.error("Please select date in correct format");
@@ -547,6 +825,261 @@ function TktStatusReport(props) {
             </Table>
           </TableContainer>
         </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                fontSize: 17,
+                fontWeight: "bold",
+                padding: 10,
+              }}
+            >
+              Select Date Range
+            </p>
+            <DateRangePickerComponent
+              dateRange={GraphDateRange}
+              setDateRange={setGraphDateRange}
+            />
+          </div>
+        </div>
+        <Card sx={{ m: 2 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: 10,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                padding: 10,
+              }}
+            >
+              Ticket Status Module wise
+            </p>
+            <button
+              onClick={() => {
+                downloadChart(tktStatusModuleWise);
+              }}
+              style={{ marginTop: "20px" }}
+              className="signup-button"
+            >
+              Download
+            </button>
+          </div>
+          <Bar
+            ref={tktStatusModuleWise}
+            data={{
+              labels: tktStatusModuleWiseTBody.LABELS,
+              datasets: [
+                {
+                  label: "New Requirement",
+                  backgroundColor: "#024CAA",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#024CAA",
+                  hoverBorderColor: "#024CAA",
+                  data: tktStatusModuleWiseTBody.NEW_REQUIREMENT,
+                },
+                {
+                  label: "Service Request",
+                  backgroundColor: "#F3C623",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#F3C623",
+                  hoverBorderColor: "#F3C623",
+                  data: tktStatusModuleWiseTBody.SERVICE_REQUIREMENT,
+                },
+                {
+                  label: "Change Request",
+                  backgroundColor: "#72BF78",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#72BF78",
+                  hoverBorderColor: "#72BF78",
+                  data: tktStatusModuleWiseTBody.CHANGE_REQUIREMENT,
+                },
+              ],
+            }}
+            options={{
+              // plugins: {
+              //   datalabels: {
+              //     anchor: "end", // Anchors the label
+              //     align: "top", // Aligns it to the top
+              //     color: "#000", // Text color
+              //     font: {
+              //       weight: "bold",
+              //     },
+              //     formatter: (value) => value, // Display the value as is
+              //   },
+              // },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            }}
+          />
+        </Card>
+
+        <Card sx={{ m: 2 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: 10,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                padding: 10,
+              }}
+            >
+              Last Two Weeks Accomplishment
+            </p>
+            <button
+              onClick={() => {
+                downloadChart(lastTwoWeekAcmlishmnt);
+              }}
+              style={{ marginTop: "20px" }}
+              className="signup-button"
+            >
+              Download
+            </button>
+          </div>
+
+          <Bar
+            ref={lastTwoWeekAcmlishmnt}
+            data={{
+              labels: tktResolveClosedTbody.LABELS,
+              datasets: [
+                {
+                  label: "Resolved",
+                  backgroundColor: "#024CAA",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#024CAA",
+                  hoverBorderColor: "#024CAA",
+                  data: tktResolveClosedTbody.RESOLVED,
+                },
+                {
+                  label: "Closed",
+                  backgroundColor: "#EC8305",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#EC8305",
+                  hoverBorderColor: "#EC8305",
+                  data: tktResolveClosedTbody.CLOSED,
+                },
+              ],
+            }}
+            options={{
+              // plugins: {
+              //   datalabels: {
+              //     anchor: "end", // Anchors the label
+              //     align: "top", // Aligns it to the top
+              //     color: "#000", // Text color
+              //     font: {
+              //       weight: "bold",
+              //     },
+              //     formatter: (value) => value, // Display the value as is
+              //   },
+              // },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            }}
+          />
+        </Card>
+
+        <Card sx={{ m: 2 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: 10,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                padding: 10,
+              }}
+            >
+              Upcoming Task
+            </p>
+            <button
+              onClick={() => {
+                downloadChart(upcomingTasks);
+              }}
+              style={{ marginTop: "20px" }}
+              className="signup-button"
+            >
+              Download
+            </button>
+          </div>
+
+          <Bar
+            ref={upcomingTasks}
+            data={{
+              labels: upComingTaskTbody.LABELS,
+              datasets: [
+                {
+                  label: "Unassigned",
+                  backgroundColor: "#024CAA",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#024CAA",
+                  hoverBorderColor: "#024CAA",
+                  data: upComingTaskTbody.UNASSIGNED,
+                },
+                {
+                  label: "Cust. Action",
+                  backgroundColor: "#EC8305",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#EC8305",
+                  hoverBorderColor: "#EC8305",
+                  data: upComingTaskTbody.CUSTOMER_ACTION,
+                },
+                {
+                  label: "Under Process by samishti",
+                  backgroundColor: "#EC8305",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "#EC8305",
+                  hoverBorderColor: "#EC8305",
+                  data: upComingTaskTbody.UNDER_PROCESS_BY_SAMISHTI,
+                },
+              ],
+            }}
+            options={{
+              // plugins: {
+              //   datalabels: {
+              //     anchor: "end", // Anchors the label
+              //     align: "top", // Aligns it to the top
+              //     color: "#000", // Text color
+              //     font: {
+              //       weight: "bold",
+              //     },
+              //     formatter: (value) => value, // Display the value as is
+              //   },
+              // },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            }}
+          />
+        </Card>
       </div>
     </MainScreen>
   );

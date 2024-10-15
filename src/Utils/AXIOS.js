@@ -1,4 +1,3 @@
-// const defaultPort = "http://localhost:7001/"; //dev
 const defaultPort = "https://pdhanewala.com:7001/"; //prod
 const imageUrl = "Support_Portal_api/images/";
 const clientLogin = "Support_Portal_api/login/login";
@@ -129,6 +128,8 @@ const getDashboardTickets = "Support_Portal_api/Ticket/getDashboardTickets";
 const smeRoleUpdate = "Support_Portal_api/Samishti/smeRoleUpdate";
 const ticketStatusReport =
   "Support_Portal_api/Ticket/ticketStatusReport?CLIENT_ID=";
+const ticketsStatusModuleWise =
+  "Support_Portal_api/Ticket/ticketsStatusModuleWise?";
 
 export default {
   defaultPort,
@@ -234,4 +235,5 @@ export default {
   getDashboardTickets,
   smeRoleUpdate,
   ticketStatusReport,
+  ticketsStatusModuleWise,
 };

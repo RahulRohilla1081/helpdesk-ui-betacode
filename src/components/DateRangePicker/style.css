@@ -1,0 +1,17 @@
+.custom-date-picker .DateRangePickerInput {
+  height: 30px;  /* Set to your preferred height */
+  font-size: 14px;
+}
+
+.custom-date-picker .DateInput_input {
+  padding: 5px 10px;  /* Reduce padding */
+  height: 30px;
+}
+
+.custom-date-picker .CalendarDay {
+  padding: 5px; /* Reduce padding around calendar days */
+}
+
+.custom-date-picker .DayPicker {
+  font-size: 12px; /* Reduce overall font size in the calendar */
+}
