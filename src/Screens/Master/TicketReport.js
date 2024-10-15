@@ -70,7 +70,7 @@ function TicketReport(props) {
     { flag: 2, value: "Resolved" },
     { flag: 3, value: "Client Approval Pndg" },
     { flag: 4, value: "Closed" },
-    { flag: 5, value: "Under Process by Samishti" },
+    { flag: 5, value: "Under Process by BetaCode" },
     { flag: 6, value: "On Hold" },
     { flag: 7, value: "Effort Approval Pndg" },
     { flag: 8, value: "Appr Pndg" },

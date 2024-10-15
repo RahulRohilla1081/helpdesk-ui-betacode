@@ -361,6 +361,8 @@ function Header(props, { children }) {
       sessionStorage.setItem("NOTIFICATION_DATA", JSON.stringify(data));
 
       if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.CREATED_AT) - new Date(a.CREATED_AT));
+
         setNotificationData(data);
         let tempCount = 0;
         data.map((val) => {
@@ -455,7 +457,6 @@ function Header(props, { children }) {
     let tempNotificationData = sessionStorage.getItem("NOTIFICATION_DATA");
     tempNotificationData = JSON.parse(tempNotificationData);
     console.log("Asdmhbasdjasdas", tempNotificationData);
-    
 
     const index = tempNotificationData.findIndex(
       (val) => val.NOTIFICATION_ID == notificationID
@@ -594,15 +595,15 @@ function Header(props, { children }) {
               open={Boolean(anchorElUser2)}
               onClose={handleCloseUserMenu2}
             >
+              
               {notificationData.map((val) => {
                 return (
                   <>
+                  
                     <div
                       style={{
                         minWidth: 250,
-                        padding: 2,
-                        paddingTop: 5,
-                        paddingBottom: 5,
+                        padding: 10,
                         lineHeight: "10px",
                         backgroundColor: val.SEEN == false ? "#ADD8E6" : null,
                         cursor: "pointer",
@@ -610,7 +611,7 @@ function Header(props, { children }) {
                       onClick={() => {
                         handleIconClick(val);
                         // console.log("Asdbashjdasdasd",val.NOTIFICATION_ID);
-                        
+
                         changeNotificationSeen(val.NOTIFICATION_ID);
                       }}
                       className="notification-item"
@@ -627,7 +628,7 @@ function Header(props, { children }) {
                             fontSize: 12,
                           }}
                         >
-                          {val.TITLE}
+                          {val.TITLE} -{val.TICKET_ID}
                         </span>
                         <span
                           style={{

@@ -736,7 +736,7 @@ console.log("ASdkjnasdhbsad",thisTicket.TICKET_ID);
       .post(AXIOS.defaultPort + AXIOS.ticketPickup, {
         TICKET_ID: thisTicket.TICKET_ID,
         FLAG: 5,
-        STATUS: "Under Process By Samishti",
+        STATUS: "Under Process By BetaCode",
         ASSIGNED_TO: props.LOGGED_IN_DATA.USER_ID,
         PICKED_BY: props.LOGGED_IN_DATA.USER_ID,
         PENDING_WITH: [props.LOGGED_IN_DATA.USER_ID],

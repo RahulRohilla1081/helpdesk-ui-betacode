@@ -16,8 +16,8 @@ const statusFlag = [
   { flag: 4, value: "CLOSED", status: "Closed" },
   {
     flag: 5,
-    value: "UNDER PROCESS BY SAMISHTI",
-    status: "Under Process by Samishti",
+    value: "UNDER PROCESS BY BETACODE",
+    status: "Under Process by BetaCode",
   },
   { flag: 6, value: "ON HOLD", status: "On Hold" },
   {
