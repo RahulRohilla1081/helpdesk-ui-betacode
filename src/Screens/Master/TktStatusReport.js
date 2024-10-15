@@ -717,7 +717,6 @@ function TktStatusReport(props) {
             pageCount={50}
           /> */}
           <TableContainer
-            className="horizontal-scroll-table"
             stickyHeader
             style={{
               marginTop: 50,
