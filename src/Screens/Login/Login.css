@@ -38,7 +38,7 @@
 .raleway-font {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  color: #4f75ff;
+  color: #2687d7;
 }
 
 .login-input-div {
@@ -73,7 +73,7 @@
   overflow: hidden;
   transition: all 0.2s;
   cursor: pointer;
-  background-color: #4f75ff;
+  background-color: #2687d7;
   margin-top: 40px;
   min-width: 100%;
   min-height: 48px;
@@ -98,7 +98,7 @@
 }
 
 .login-forgot-password-text {
-  color: #4f75ff;
+  color: #2687d7;
   cursor: pointer;
   margin: 0px;
 }
@@ -142,8 +142,8 @@
 
 .login-right-container {
   min-width: 65vw;
-  margin-top: 100px;
-  background: url("../../assets/IMAGES/blob-haikei-3.svg") left top repeat;
+  /* margin-top: 100px; */
+  /* background: url("../../assets/IMAGES/blob-haikei-3.svg") left top repeat; */
   background-repeat: no-repeat;
 }
 
