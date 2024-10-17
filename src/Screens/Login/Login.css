@@ -151,11 +151,24 @@
 @media (max-width: 768px) {
   .login-main-container {
     flex-direction: column;
-    padding: 20px;
+    /* padding: 20px; */
+    align-items: center;
+    display: flex;
+    justify-content: center; /* Centers horizontally */
     align-items: center;
   }
 
-  .sub-left-container,
+  .sub-left-container {
+    width: 95%;
+    padding-bottom: 20px;
+    background-color: #fff;
+    filter: drop-shadow(6px 18px 60px rgba(13, 80, 96, 0.25));
+    border-radius: 0px 30px 30px 0px;
+    /* margin-top: 5%; */
+    /* margin-bottom: 4%; */
+    margin-right: 40px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
   .sub-right-container {
     width: 100%;
     margin: 0;
