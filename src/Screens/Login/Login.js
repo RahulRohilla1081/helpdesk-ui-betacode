@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Login.css";
 import LoginImage from "../../assets/IMAGES/supportdesk-login-illustration.svg";
 import SAMISHTILOGO from "../../assets/IMAGES/SamishtiLogo2.png";
+import rb_2147783509 from "../../assets/IMAGES/rb_2147783509.svg";
 import UserLogin from "./EmployeeLogin";
 import cogoToast from "cogo-toast";
 import { connect, useDispatch } from "react-redux";
@@ -278,7 +279,7 @@ function Login(props) {
           <img height={55} width={180} src={SAMISHTILOGO} />
         </div>
         <div className="login-left-inner-container">
-          <h2 className="login-header-text raleway-font"> Hello there! 👋</h2>
+          <h2 className="login-header-text raleway-font"> Hello! 👋</h2>
           <p
             className="sub-heading-text inter-font"
             style={{
@@ -462,7 +463,23 @@ function Login(props) {
       {/* <div className="sub-right-container">
         <img src={LoginImage} />
       </div> */}
-      <div className="login-right-container cover-img"></div>
+      <div className="login-right-container cover-img">
+        <div style={{
+          minHeight:"80vh",
+          display:"flex",
+          alignItems:"center",
+          justifyContent:"center"
+        }}>
+          <img
+            src={rb_2147783509}
+            style={{
+              width: 400,
+              height: 400,
+              borderRadius:200
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

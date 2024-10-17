@@ -38,7 +38,7 @@
 .raleway-font {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  color: #086b8f;
+  color: #4f75ff;
 }
 
 .login-input-div {
@@ -73,7 +73,7 @@
   overflow: hidden;
   transition: all 0.2s;
   cursor: pointer;
-  background-color: #219bcc;
+  background-color: #4f75ff;
   margin-top: 40px;
   min-width: 100%;
   min-height: 48px;
@@ -98,7 +98,7 @@
 }
 
 .login-forgot-password-text {
-  color: #33acd1;
+  color: #4f75ff;
   cursor: pointer;
   margin: 0px;
 }
@@ -142,9 +142,9 @@
 
 .login-right-container {
   min-width: 65vw;
-  background: url("../../assets/IMAGES/supportdesk-login-illustration.svg")
-      right bottom no-repeat,
-    url("../../assets/IMAGES/loginBg.svg") left top repeat;
+  margin-top: 100px;
+  background: url("../../assets/IMAGES/blob-haikei-3.svg") left top repeat;
+  background-repeat: no-repeat;
 }
 
 /* Mobile view adjustments */
@@ -172,6 +172,12 @@
   .sub-right-container {
     width: 100%;
     margin: 0;
+  }
+  .login-right-container {
+    min-width: 0vw;
+    height: 0vh;
+    display: none;
+    background-color: #000;
   }
 
   .login-header-text {
