@@ -13,12 +13,20 @@ import { Box, Modal } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { saveAs } from "file-saver";
-
-
-
+import * as XLSX from "xlsx";
 
 function AddEmployees() {
+  const [transactionLoading, setTransactionLoading] = useState(false);
   const [Tbody, setTbody] = useState([]);
+  const headers = [
+    "EMP_NAME",
+    "EMP_MOBILE",
+    "EMP_EMAIL",
+    "REPORTING_MANAGER",
+    "DESIGNATION",
+    "DESIGNATION_DESCRIPTION",
+    "WORK_LOCATION",
+  ]; // Example headers
   const [formData, setFormData] = useState({
     EMP_ID: "",
     EMP_ID_ERROR: false,
@@ -40,16 +48,88 @@ function AddEmployees() {
     boxShadow: 24,
     p: 4,
   };
+  const importStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "50%",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
-    const [ClickedRowData, setClickedRowData] = useState(null);
-    const [EditModalOpen, setEditModalOpen] = useState(false);
-    const handleEditModalOpen = () => setEditModalOpen(true);
-    const handleEditModalClose = () => setEditModalOpen(false);
+  const [importFieldData, setImportFieldData] = useState([]);
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
 
-    const [DeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const handleDeleteModalOpen = () => setDeleteModalOpen(true);
-    const handleDeleteModalClose = () => setDeleteModalOpen(false);
+    console.log("Asdjkasdjksa", file);
+
+    const reader = new FileReader();
+
+    // Define the expected headers
+
+    reader.onload = (event) => {
+      const binaryStr = event.target.result;
+      const workbook = XLSX.read(binaryStr, { type: "binary" });
+
+      // Assume the first sheet is the one you want to read
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      // Convert the sheet to JSON format (header row is considered as row 1)
+      const data = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+      // Check if the headers match the expected format
+      const fileHeaders = data[0]; // Get the first row, which should be the header
+
+      // Compare headers with the expected headers
+      const headersMatch =
+        JSON.stringify(fileHeaders) === JSON.stringify(headers);
+
+      // Check if there is at least one data row (i.e., data array length > 1)
+      const hasDataRow = data.length > 1;
+
+      if (headersMatch && hasDataRow) {
+        // Transform data to array of objects
+        const formattedData = data.slice(1).map((row) => {
+          return headers.reduce((obj, header, index) => {
+            // Set an empty string if no data is present in the cell
+            obj[header] = row[index] !== undefined ? row[index] : "";
+            return obj;
+          }, {});
+        });
+
+        // Set the data to state
+        setImportFieldData(formattedData);
+
+        handleImportModalOpen();
+      } else {
+        // If headers do not match or no data row is present, alert the user
+        let errorMessage = "Error: ";
+        if (!headersMatch)
+          errorMessage += "Headers do not match the expected format.";
+        if (!hasDataRow) errorMessage += " There is no data row in the file.";
+        alert(errorMessage);
+      }
+    };
+
+    reader.readAsBinaryString(file);
+  };
+
+  const [ClickedRowData, setClickedRowData] = useState(null);
+  const [EditModalOpen, setEditModalOpen] = useState(false);
+  const handleEditModalOpen = () => setEditModalOpen(true);
+  const handleEditModalClose = () => setEditModalOpen(false);
+
+  const [DeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const handleDeleteModalOpen = () => setDeleteModalOpen(true);
+  const handleDeleteModalClose = () => setDeleteModalOpen(false);
+
+  const [ImportModalOpen, setImportModalOpen] = useState(false);
+  const handleImportModalOpen = () => setImportModalOpen(true);
+  const handleImportModalClose = () => setImportModalOpen(false);
 
   const columns = [
     {
@@ -65,6 +145,7 @@ function AddEmployees() {
       //   ),
       // width: "80px",
     },
+
     {
       name: "Employee Name",
       selector: (val) => val.EMP_NAME,
@@ -144,7 +225,81 @@ function AddEmployees() {
     },
   ];
 
+  const importColumns = [
+    {
+      name: "Employee Name",
+      width: "200px",
+
+      selector: (val) => val.EMP_NAME,
+      sortable: false,
+    },
+    {
+      name: "Employee Mobile",
+      width: "200px",
+
+      selector: (val) => val.EMP_MOBILE,
+      sortable: false,
+    },
+    {
+      name: "Employee Email",
+      width: "200px",
+
+      selector: (val) => val.EMP_EMAIL,
+      sortable: false,
+    },
+    {
+      name: "Reporting Manager",
+      width: "200px",
+
+      selector: (val) => val.REPORTING_MANAGER,
+      sortable: false,
+    },
+    {
+      name: "Designation",
+      width: "200px",
+
+      selector: (val) => val.DESIGNATION,
+      sortable: false,
+    },
+    {
+      name: "Work Location",
+      width: "200px",
+
+      selector: (val) => val.WORK_LOCATION,
+      sortable: false,
+    },
+    {
+      name: "Action",
+      width: "200px",
+
+      selector: (val) => val.WORK_LOCATION,
+      sortable: false,
+      cell: (val) => (
+        <div>
+          <EditIcon
+            sx={{
+              color: "#30344a",
+              cursor: "pointer",
+              height: 20,
+            }}
+            onClick={() => {
+              handleEditModalOpen();
+
+              let temp = { ...val };
+              // temp.DESIGNATION = DesignationArr.find(
+              //   (item) => item.value == val.DESIGNATION
+              // );
+              setClickedRowData(temp);
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
+
   const handleSubmit = () => {
+    if (transactionLoading == true) return;
+    setTransactionLoading(true);
     let tempFormData = { ...formData };
 
     let payload = {};
@@ -171,16 +326,34 @@ function AddEmployees() {
       axios
         .post(AXIOS.defaultPort + AXIOS.createEmployee, payload)
         .then((response) => {
-          toast.success("Employee Created");
-          getEmployeeList();
+          console.log("ASdashbdhjasd", response.data);
 
-          Object.keys(tempFormData).map((key, colIndex) => {
-            if (typeof tempFormData[key] != "boolean") {
-              tempFormData[key] = "";
-            }
-          });
+          if (response.data?.idExists) {
+            toast.error("Employee with same ID already exists");
+          }
+          if (response.data?.emailExists) {
+            toast.error("Employee with same email already exists.");
+          }
+          if (response.data?.contactExists) {
+            toast.error("Employee with same contact already exists.");
+          }
+          if (response.data?.dataSaved == true) {
+            getEmployeeList();
+
+            toast.success("Employee Created");
+            Object.keys(tempFormData).map((key, colIndex) => {
+              if (typeof tempFormData[key] != "boolean") {
+                tempFormData[key] = "";
+              }
+            });
+          }
+          setTransactionLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          setTransactionLoading(false);
+        });
+    } else {
+      setTransactionLoading(false);
     }
 
     setFormData(tempFormData);
@@ -188,15 +361,15 @@ function AddEmployees() {
     // console.log("Adkabsdhjasd",tempTATData);
   };
 
-  useEffect(()=>{
-getEmployeeList();
-  },[])
+  useEffect(() => {
+    getEmployeeList();
+  }, []);
 
   const getEmployeeList = () => {
     axios
       .get(AXIOS.defaultPort + AXIOS.getEmployee)
       .then((response) => {
-console.log("ASdaskjdaas", response.data);
+        console.log("ASdaskjdaas", response.data);
         setTbody(response.data);
       })
       .catch((err) => {
@@ -206,12 +379,9 @@ console.log("ASdaskjdaas", response.data);
   };
 
   const handleEmployeeUpdate = () => {
-
     // if (payload.DESIGNATION != "") {
     //   payload.DESIGNATION = payload.DESIGNATION.value;
     // }
-
-
 
     console.log("Adaskbhdasdasd", ClickedRowData);
 
@@ -226,15 +396,10 @@ console.log("ASdaskjdaas", response.data);
       .catch((err) => {});
   };
   const handleEmployeeDelete = () => {
-
-    // if (payload.DESIGNATION != "") {
-    //   payload.DESIGNATION = payload.DESIGNATION.value;
-    // }
-
-
-
     axios
-      .post(AXIOS.defaultPort + AXIOS.deleteEmployeeAndSave+ ClickedRowData.EMP_ID)
+      .post(
+        AXIOS.defaultPort + AXIOS.deleteEmployeeAndSave + ClickedRowData.EMP_ID
+      )
       .then((res) => {
         console.log("asdkjasndhjasd", res.data);
         toast.success("Employee Deleted");
@@ -242,77 +407,172 @@ console.log("ASdaskjdaas", response.data);
         handleDeleteModalClose();
       })
       .catch((err) => {
-        console.log("ASdajksbdjghasd",err);
+        console.log("ASdajksbdjghasd", err);
       });
   };
-   const CsvHeader = [
-     {
-       name: "Employee ID",
-       selector: "EMP_ID",
-     },
-     {
-       name: "Employee Name",
-       selector: "EMP_NAME",
-     },
-     {
-       name: "Mobile Number",
-       selector: "EMP_MOBILE",
-     },
+  const handleEmployeeImport = () => {
+    axios
+      .post(AXIOS.defaultPort + AXIOS.deleteEmployeeAndSave, {
+        importFieldData,
+      })
+      .then((res) => {
+        console.log("asdkjasndhjasd", res.data);
+        toast.success("Employee Deleted");
+        getEmployeeList();
+        handleDeleteModalClose();
+      })
+      .catch((err) => {
+        console.log("ASdajksbdjghasd", err);
+      });
+  };
+  const CsvHeader = [
+    {
+      name: "Employee ID",
+      selector: "EMP_ID",
+    },
+    {
+      name: "Employee Name",
+      selector: "EMP_NAME",
+    },
+    {
+      name: "Mobile Number",
+      selector: "EMP_MOBILE",
+    },
 
-     {
-       name: "Email ID",
-       selector: "EMP_EMAIL",
-     },
-     
-   ];
-    const handleExcelExport = () => {
-      let excelData = [...Tbody];
+    {
+      name: "Email ID",
+      selector: "EMP_EMAIL",
+    },
+  ];
+  const handleExcelExport = () => {
+    let excelData = [...Tbody];
 
-      console.log("Asdhasdbhjsadasd", excelData);
+    console.log("Asdhasdbhjsadasd", excelData);
 
-      if (excelData.length > 0) {
-        // Exclude the "Action" column from csvColumns
-        const csvColumns = CsvHeader.filter(
-          (column) => column.name !== "Action"
-        ).map((column) => column.name);
+    if (excelData.length > 0) {
+      // Exclude the "Action" column from csvColumns
+      const csvColumns = CsvHeader.filter(
+        (column) => column.name !== "Action"
+      ).map((column) => column.name);
 
-        const csvRows = excelData.map((item) =>
-          csvColumns.map((columnName) => {
-            const column = CsvHeader.find((col) => col.name === columnName);
-            if (column) {
-              let cellValue = "";
-              if (typeof column.name === "function") {
-                cellValue = column.selector(item);
+      const csvRows = excelData.map((item) =>
+        csvColumns.map((columnName) => {
+          const column = CsvHeader.find((col) => col.name === columnName);
+          if (column) {
+            let cellValue = "";
+            if (typeof column.name === "function") {
+              cellValue = column.selector(item);
+            } else {
+              if (column.name == "Status") {
+                cellValue =
+                  item[column.selector] == true ? "Active" : "Inactive";
               } else {
-                if (column.name == "Status") {
-                  cellValue =
-                    item[column.selector] == true ? "Active" : "Inactive";
-                } else {
-                  cellValue = item[column.selector] || "";
-                }
+                cellValue = item[column.selector] || "";
               }
-              // Wrap cell value in double quotes to handle commas
-              return `"${cellValue}"`;
             }
-            return ""; // Return an empty value for excluded columns
-          })
-        );
-        const csvContent =
-          csvColumns.join(",") +
-          "\n" +
-          csvRows.map((row) => row.join(",")).join("\n");
+            // Wrap cell value in double quotes to handle commas
+            return `"${cellValue}"`;
+          }
+          return ""; // Return an empty value for excluded columns
+        })
+      );
+      const csvContent =
+        csvColumns.join(",") +
+        "\n" +
+        csvRows.map((row) => row.join(",")).join("\n");
 
-        const blob = new Blob([csvContent], {
-          type: "text/csv;charset=utf-8",
-        });
-        saveAs(blob, "Employees.csv"); // Use the saveAs function to download the CSV file
-      }
-    };
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8",
+      });
+      saveAs(blob, "Employees.csv"); // Use the saveAs function to download the CSV file
+    }
+  };
+  const DownloadImportFormat = () => {
+    // Convert array of objects to CSV string
+
+    const csvContent = [headers.join(",")].join("\n");
+
+    // Create a Blob from the CSV string
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+    // Create a link element
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    // Set the download link and filename
+    link.href = url;
+    link.setAttribute("download", "data.csv");
+
+    // Append the link to the document and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up by removing the link element
+    document.body.removeChild(link);
+  };
   return (
     <MainScreenEmployee drawerWidth={282} Activekey={ADD_EMPLOYEES}>
       <Toaster />
       <div className="item-input-container">
         <div className="row item-sub-input-container">
+          <div
+            className="mb-3 "
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <label
+              htmlFor="upload"
+              className="import-button"
+              style={{
+                textAlign: "center",
+                justifyContent: "center",
+                display: "flex",
+                borderRadius: 4,
+                // marginRight: 5,
+                // marginLeft: 5,
+                minHeight: 30,
+                maxHeight: 30,
+                minWidth: 150,
+                backgroundColor: "#347928",
+              }}
+            >
+              Import Employees
+            </label>
+            <input
+              type="file"
+              name="upload"
+              className="form-control"
+              hidden={true}
+              multiple
+              id="upload"
+              accept=".csv, .xlsx, .xls"
+              style={{
+                backgroundColor: "#347928",
+              }}
+              onChange={(e) => {
+                handleFileUpload(e);
+                // const fileArray = Array.from(fileList);
+                // setSelectedFiles((prevState) => [...prevState, ...fileArray]);
+              }}
+            />
+            <button
+              style={{
+                marginLeft: 10,
+                minWidth: 150,
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              onClick={() => {
+                DownloadImportFormat();
+              }}
+              className="signup-button"
+            >
+              Download format
+            </button>
+          </div>
           <div className="col-md-3">
             <Label className="modal-label" for="basicpill-email-input4">
               Employee ID<span className="required-filed">*</span>
@@ -457,7 +717,7 @@ console.log("ASdaskjdaas", response.data);
             }}
             // onClick={handleExport}
             onClick={() => {
-                handleExcelExport();
+              handleExcelExport();
             }}
           >
             Excel Export
@@ -645,6 +905,49 @@ console.log("ASdaskjdaas", response.data);
             // sx={{ mt: 1 }}
             onClick={(e) => {
               handleEmployeeDelete();
+            }}
+            style={{
+              backgroundColor: "#219bcc",
+              marginTop: 15,
+              padding: "2%",
+              margin: "2%",
+              width: "30%",
+            }}
+            className="col adduser-button-style"
+          >
+            Confirm
+          </button>
+        </Box>
+      </Modal>
+      <Modal
+        open={ImportModalOpen}
+        onClose={handleImportModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={importStyle}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h5>Import Employee</h5>
+            <CloseIcon
+              style={{ cursor: "pointer" }}
+              onClick={handleImportModalClose}
+            />
+          </div>
+          <div
+            style={{
+              height: 1,
+              backgroundColor: "#d3d3d3",
+              marginBottom: "2%",
+            }}
+          />
+
+          <ReactDataTable columns={importColumns} data={importFieldData} />
+
+          <button
+            // variant="contained"
+            // sx={{ mt: 1 }}
+            onClick={(e) => {
+              handleEmployeeImport();
             }}
             style={{
               backgroundColor: "#219bcc",

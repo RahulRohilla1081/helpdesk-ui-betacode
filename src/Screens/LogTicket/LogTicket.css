@@ -106,6 +106,27 @@
   background-image: linear-gradient(to right, #23b2d5, #219bcc);
   /* padding: 10px; */
 }
+.import-button {
+  font-family: poppins;
+  font-size: 14px;
+  /* background: royalblue; */
+  color: white;
+  max-width: 90px;
+  /* max-height: 48px; */
+  text-align: center;
+  /* padding: 0.7em 1em; */
+  /* padding-left: 0.9em; */
+  display: flex;
+  justify-content: "center";
+  align-items: center;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  background-image: linear-gradient(to right, #1D6F42, #1D6F42);
+  /* padding: 10px; */
+}
 
 .error-text-field{
     color:red;

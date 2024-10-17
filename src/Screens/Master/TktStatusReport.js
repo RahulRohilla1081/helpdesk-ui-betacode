@@ -722,7 +722,7 @@ function TktStatusReport(props) {
               marginTop: 50,
             }}
           >
-            <Table aria-label="customized table" stickyHeader>
+            <Table aria-label="customized table" stickyHeader> 
               <TableHead className="scroll-effect-header" stickyHeader>
                 <tr
                   style={{

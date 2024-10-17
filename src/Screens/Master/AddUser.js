@@ -24,6 +24,9 @@ import { connect } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import { ADDUSER } from "../../Utils/Routes";
 import { saveAs } from "file-saver";
+import ReactDataTable from "../../components/ReactDataTable/ReactDataTable";
+import * as XLSX from "xlsx";
+
 
 const style = {
   position: "absolute",
@@ -36,9 +39,28 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+  const importStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "50%",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
 
 function AddUser(props) {
   const [Tbody, setTbody] = useState([]);
+
+  const headers = [
+    "CUSTOMER_ID",
+    "USER_NAME",
+    "USER_MOBILE",
+    "USER_EMAIL",
+  ]; // Example headers
   const [pmClients, setPmClients] = useState([]);
   const [ClickedRowData, setClickedRowData] = useState(null);
   const [EditModalOpen, setEditModalOpen] = useState(false);
@@ -128,7 +150,6 @@ function AddUser(props) {
     //   console.log("sdasdasdasdasdsad", pair[0] + ", " + pair[1]);
     // }
 
-
     axios
       .post(AXIOS.defaultPort + AXIOS.createUser, payload)
       .then((res) => {
@@ -205,82 +226,245 @@ function AddUser(props) {
         .catch((err) => {});
     }
   };
-   const CsvHeader = [
-     {
-       name: "Company ID",
-       selector: "CLIENT_ID",
-     },
-     {
-       name: "Company Name",
-       selector: "COMPANY_NAME",
-     },
+  const CsvHeader = [
+    {
+      name: "Company ID",
+      selector: "CLIENT_ID",
+    },
+    {
+      name: "Company Name",
+      selector: "COMPANY_NAME",
+    },
 
-     {
-       name: "User ID",
-       selector: "USER_ID",
-     },
-     {
-       name: "User Name",
-       selector: "USER_NAME",
-     },
-     {
-       name: "Mobile",
-       selector: "USER_MOBILE",
-     },
-     {
-       name: "Email ID",
-       selector: "USER_EMAIL",
-     },
-   ];
-   const handleExcelExport = () => {
- 
-     let excelData = [...Tbody];
+    {
+      name: "User ID",
+      selector: "USER_ID",
+    },
+    {
+      name: "User Name",
+      selector: "USER_NAME",
+    },
+    {
+      name: "Mobile",
+      selector: "USER_MOBILE",
+    },
+    {
+      name: "Email ID",
+      selector: "USER_EMAIL",
+    },
+  ];
 
-     console.log("Asdhasdbhjsadasd", excelData);
+  const [ImportModalOpen, setImportModalOpen] = useState(false);
+  const handleImportModalOpen = () => setImportModalOpen(true);
+  const handleImportModalClose = () => setImportModalOpen(false);
 
-     if (excelData.length > 0) {
-       // Exclude the "Action" column from csvColumns
-       const csvColumns = CsvHeader.filter(
-         (column) => column.name !== "Action"
-       ).map((column) => column.name);
+  const importColumns = [
+    {
+      name: "Employee Name",
+      width: "200px",
 
-       const csvRows = excelData.map((item) =>
-         csvColumns.map((columnName) => {
-           const column = CsvHeader.find((col) => col.name === columnName);
-           if (column) {
-             let cellValue = "";
-             if (typeof column.name === "function") {
-               cellValue = column.selector(item);
-             } else {
-               if (column.name == "Status") {
-                 cellValue =
-                   item[column.selector] == true ? "Active" : "Inactive";
-               } else {
-                 cellValue = item[column.selector] || "";
-               }
-             }
-             // Wrap cell value in double quotes to handle commas
-             return `"${cellValue}"`;
-           }
-           return ""; // Return an empty value for excluded columns
-         })
-       );
-       const csvContent =
-         csvColumns.join(",") +
-         "\n" +
-         csvRows.map((row) => row.join(",")).join("\n");
+      selector: (val) => val.EMP_NAME,
+      sortable: false,
+    },
+    {
+      name: "Employee Mobile",
+      width: "200px",
 
-       const blob = new Blob([csvContent], {
-         type: "text/csv;charset=utf-8",
-       });
-       saveAs(blob, "Users.csv"); // Use the saveAs function to download the CSV file
-     }
-   };
+      selector: (val) => val.EMP_MOBILE,
+      sortable: false,
+    },
+    {
+      name: "Employee Email",
+      width: "200px",
+
+      selector: (val) => val.EMP_EMAIL,
+      sortable: false,
+    },
+    {
+      name: "Reporting Manager",
+      width: "200px",
+
+      selector: (val) => val.REPORTING_MANAGER,
+      sortable: false,
+    },
+    {
+      name: "Designation",
+      width: "200px",
+
+      selector: (val) => val.DESIGNATION,
+      sortable: false,
+    },
+    {
+      name: "Work Location",
+      width: "200px",
+
+      selector: (val) => val.WORK_LOCATION,
+      sortable: false,
+    },
+  ];
+  const handleExcelExport = () => {
+    let excelData = [...Tbody];
+
+    console.log("Asdhasdbhjsadasd", excelData);
+
+    if (excelData.length > 0) {
+      // Exclude the "Action" column from csvColumns
+      const csvColumns = CsvHeader.filter(
+        (column) => column.name !== "Action"
+      ).map((column) => column.name);
+
+      const csvRows = excelData.map((item) =>
+        csvColumns.map((columnName) => {
+          const column = CsvHeader.find((col) => col.name === columnName);
+          if (column) {
+            let cellValue = "";
+            if (typeof column.name === "function") {
+              cellValue = column.selector(item);
+            } else {
+              if (column.name == "Status") {
+                cellValue =
+                  item[column.selector] == true ? "Active" : "Inactive";
+              } else {
+                cellValue = item[column.selector] || "";
+              }
+            }
+            // Wrap cell value in double quotes to handle commas
+            return `"${cellValue}"`;
+          }
+          return ""; // Return an empty value for excluded columns
+        })
+      );
+      const csvContent =
+        csvColumns.join(",") +
+        "\n" +
+        csvRows.map((row) => row.join(",")).join("\n");
+
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8",
+      });
+      saveAs(blob, "Users.csv"); // Use the saveAs function to download the CSV file
+    }
+  };
+  const [importFieldData, setImportFieldData] = useState([]);
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+
+    console.log("Asdjkasdjksa", file);
+
+    const reader = new FileReader();
+
+    // Define the expected headers
+
+    reader.onload = (event) => {
+      const binaryStr = event.target.result;
+      const workbook = XLSX.read(binaryStr, { type: "binary" });
+
+      // Assume the first sheet is the one you want to read
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      // Convert the sheet to JSON format (header row is considered as row 1)
+      const data = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+      // Check if the headers match the expected format
+      const fileHeaders = data[0]; // Get the first row, which should be the header
+
+      // Compare headers with the expected headers
+      const headersMatch =
+        JSON.stringify(fileHeaders) === JSON.stringify(headers);
+
+      // Check if there is at least one data row (i.e., data array length > 1)
+      const hasDataRow = data.length > 1;
+
+      if (headersMatch && hasDataRow) {
+        // Transform data to array of objects
+        const formattedData = data.slice(1).map((row) => {
+          return headers.reduce((obj, header, index) => {
+            // Set an empty string if no data is present in the cell
+            obj[header] = row[index] !== undefined ? row[index] : "";
+            return obj;
+          }, {});
+        });
+
+        // Set the data to state
+        setImportFieldData(formattedData);
+
+        handleImportModalOpen();
+      } else {
+        // If headers do not match or no data row is present, alert the user
+        let errorMessage = "Error: ";
+        if (!headersMatch)
+          errorMessage += "Headers do not match the expected format.";
+        if (!hasDataRow) errorMessage += " There is no data row in the file.";
+        alert(errorMessage);
+      }
+    };
+
+    reader.readAsBinaryString(file);
+  };
   return (
     <MainScreenEmployee drawerWidth={282} Activekey={ADDUSER}>
       <Toaster />
       <div className="user-input-container">
         <div className="row user-sub-input-container">
+          <div
+            className="mb-3 "
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <label
+              htmlFor="upload"
+              className="import-button"
+              style={{
+                textAlign: "center",
+                justifyContent: "center",
+                display: "flex",
+                borderRadius: 4,
+                // marginRight: 5,
+                // marginLeft: 5,
+                minHeight: 30,
+                maxHeight: 30,
+                minWidth: 150,
+                backgroundColor: "#347928",
+              }}
+            >
+              Import Employees
+            </label>
+            <input
+              type="file"
+              name="upload"
+              className="form-control"
+              hidden={true}
+              multiple
+              id="upload"
+              accept=".csv, .xlsx, .xls"
+              style={{
+                backgroundColor: "#347928",
+              }}
+              onChange={(e) => {
+                handleFileUpload(e);
+                // const fileArray = Array.from(fileList);
+                // setSelectedFiles((prevState) => [...prevState, ...fileArray]);
+              }}
+            />
+            <button
+              style={{
+                marginLeft: 10,
+                minWidth: 150,
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              onClick={() => {
+                DownloadImportFormat();
+              }}
+              className="signup-button"
+            >
+              Download format
+            </button>
+          </div>
           <div className="col-md-3">
             <Label for="basicpill-email-input4" className="modal-label">
               Customer<span className="required-filed">*</span>
@@ -688,6 +872,49 @@ function AddUser(props) {
             className="col adduser-button-style"
           >
             Delete
+          </button>
+        </Box>
+      </Modal>
+      <Modal
+        open={ImportModalOpen}
+        onClose={handleImportModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={importStyle}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h5>Import Employee</h5>
+            <CloseIcon
+              style={{ cursor: "pointer" }}
+              onClick={handleImportModalClose}
+            />
+          </div>
+          <div
+            style={{
+              height: 1,
+              backgroundColor: "#d3d3d3",
+              marginBottom: "2%",
+            }}
+          />
+
+          <ReactDataTable columns={importColumns} data={importFieldData} />
+
+          <button
+            // variant="contained"
+            // sx={{ mt: 1 }}
+            onClick={(e) => {
+              handleEmployeeImport();
+            }}
+            style={{
+              backgroundColor: "#219bcc",
+              marginTop: 15,
+              padding: "2%",
+              margin: "2%",
+              width: "30%",
+            }}
+            className="col adduser-button-style"
+          >
+            Confirm
           </button>
         </Box>
       </Modal>
