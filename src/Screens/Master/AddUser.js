@@ -113,6 +113,29 @@ function AddUser(props) {
       getPmClients();
     }
   }, []);
+  const DownloadImportFormat = () => {
+    // Convert array of objects to CSV string
+
+    const csvContent = [headers.join(",")].join("\n");
+
+    // Create a Blob from the CSV string
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+    // Create a link element
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    // Set the download link and filename
+    link.href = url;
+    link.setAttribute("download", "data.csv");
+
+    // Append the link to the document and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up by removing the link element
+    document.body.removeChild(link);
+  };
 
   const createNewUser = () => {
     //     USER_NAME: "",
@@ -401,6 +424,21 @@ function AddUser(props) {
     };
 
     reader.readAsBinaryString(file);
+  };
+  const handleEmployeeImport = () => {
+    axios
+      .post(AXIOS.defaultPort + AXIOS.deleteEmployeeAndSave, {
+        importFieldData,
+      })
+      .then((res) => {
+        console.log("asdkjasndhjasd", res.data);
+        toast.success("Employee Deleted");
+        getEmployeeList();
+        handleDeleteModalClose();
+      })
+      .catch((err) => {
+        console.log("ASdajksbdjghasd", err);
+      });
   };
   return (
     <MainScreenEmployee drawerWidth={282} Activekey={ADDUSER}>
