@@ -432,9 +432,6 @@ function AddUser(props) {
       })
       .then((res) => {
         console.log("asdkjasndhjasd", res.data);
-        toast.success("Employee Deleted");
-        getEmployeeList();
-        handleDeleteModalClose();
       })
       .catch((err) => {
         console.log("ASdajksbdjghasd", err);
