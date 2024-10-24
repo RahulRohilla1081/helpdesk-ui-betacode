@@ -130,6 +130,11 @@ const ticketStatusReport =
   "Support_Portal_api/Ticket/ticketStatusReport?CLIENT_ID=";
 const ticketsStatusModuleWise =
   "Support_Portal_api/Ticket/ticketsStatusModuleWise?";
+const deleteNotification = "Support_Portal_api/Notification/deleteNotification";
+const notificationMarkAsRead =
+  "Support_Portal_api/Notification/notificationMarkAsRead";
+const ticketStatusDetails =
+  "Support_Portal_api/Ticket/ticketStatusDetails?CLIENT_ID=";
 
 export default {
   defaultPort,
@@ -236,4 +241,7 @@ export default {
   smeRoleUpdate,
   ticketStatusReport,
   ticketsStatusModuleWise,
+  deleteNotification,
+  notificationMarkAsRead,
+  ticketStatusDetails,
 };

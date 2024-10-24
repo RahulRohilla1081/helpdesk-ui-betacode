@@ -50,6 +50,7 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { Spinner } from "reactstrap";
 function HideOnScroll(props) {
   const { children, window } = props;
 
@@ -361,8 +362,6 @@ function Header(props, { children }) {
       sessionStorage.setItem("NOTIFICATION_DATA", JSON.stringify(data));
 
       if (data && data.length > 0) {
-        data.sort((a, b) => new Date(b.CREATED_AT) - new Date(a.CREATED_AT));
-
         setNotificationData(data);
         let tempCount = 0;
         data.map((val) => {
@@ -470,6 +469,72 @@ function Header(props, { children }) {
       NOTIFICATION_ID: notificationID,
       USER_ID: props.LOGGED_IN_DATA.USER_ID,
     });
+  };
+
+  const [notificationSeenLoading, setNotificationSeenLoading] =
+    React.useState(false);
+  const [notificationDeleteLoading, setNotificationDeleteLoading] =
+    React.useState(false);
+  const MarkAllNotificationRead = () => {
+    if (notificationSeenLoading == true) return;
+    setNotificationSeenLoading(true);
+    axios
+      .post(AXIOS.defaultPort + AXIOS.notificationMarkAsRead, {
+        EMP_ID: props.LOGGED_IN_DATA.USER_ID,
+        NOTIFICATION_ID: [],
+      })
+      .then((response) => {
+        setNotificationSeenLoading(false);
+        let tempNotificationData = [...notificationData];
+
+        tempNotificationData.map((val) => {
+          val.SEEN = true;
+        });
+        setNotificationData(tempNotificationData);
+        sessionStorage.setItem(
+          "NOTIFICATION_DATA",
+          JSON.stringify(tempNotificationData)
+        );
+      })
+      .catch((err) => {
+        console.log("ASdasbdsa", err);
+      });
+  };
+  const deleteAllNotificationRead = () => {
+    if (notificationDeleteLoading == true) return;
+    setNotificationDeleteLoading(true);
+    axios
+      .post(AXIOS.defaultPort + AXIOS.deleteNotification, {
+        EMP_ID: props.LOGGED_IN_DATA.USER_ID,
+        NOTIFICATION_ID: [],
+      })
+      .then((response) => {
+        console.log("ASdasjbhdashda", response.data);
+
+        setNotificationDeleteLoading(false);
+        setNotificationData([]);
+        setNotificationCount(null);
+
+        // socket.emit("join", { USER_ID: props.LOGGED_IN_DATA.USER_ID });
+        // toast("Notification Deleted", {
+        //   position: "top-right",
+        //   autoClose: 5000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   onClick: () => {
+        //     handleIconClick(val);
+        //     changeNotificationSeen(val.NOTIFICATION_ID);
+        //   },
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "light",
+        //   transition: Bounce,
+        // });
+      })
+      .catch((err) => {
+        console.log("ASdasbdsa", err);
+      });
   };
 
   return (
@@ -595,15 +660,61 @@ function Header(props, { children }) {
               open={Boolean(anchorElUser2)}
               onClose={handleCloseUserMenu2}
             >
-              
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: 10,
+                  margin: 5,
+                  padding: 5,
+                }}
+              >
+                <button
+                  className="signup-button"
+                  style={{
+                    minWidth: 120,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  onClick={() => {
+                    MarkAllNotificationRead();
+                  }}
+                >
+                  {notificationSeenLoading ? (
+                    <Spinner size={"sm"} />
+                  ) : (
+                    " Mark all as read"
+                  )}
+                </button>
+                <button
+                  className="signup-button"
+                  style={{
+                    minWidth: 100,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  onClick={() => {
+                    deleteAllNotificationRead();
+                  }}
+                >
+                  {notificationDeleteLoading ? (
+                    <Spinner size={"sm"} />
+                  ) : (
+                    "   Delete All"
+                  )}
+                </button>
+              </div>
+              <Divider />
+
               {notificationData.map((val) => {
                 return (
                   <>
-                  
                     <div
                       style={{
                         minWidth: 250,
-                        padding: 10,
+                        padding: 2,
+                        paddingTop: 5,
+                        paddingBottom: 5,
                         lineHeight: "10px",
                         backgroundColor: val.SEEN == false ? "#ADD8E6" : null,
                         cursor: "pointer",
@@ -628,7 +739,7 @@ function Header(props, { children }) {
                             fontSize: 12,
                           }}
                         >
-                          {val.TITLE} -{val.TICKET_ID}
+                          {val.TITLE}
                         </span>
                         <span
                           style={{

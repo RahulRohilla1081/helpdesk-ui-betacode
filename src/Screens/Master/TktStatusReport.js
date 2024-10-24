@@ -1,7 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import MainScreen from "../../components/AppDrawer/MainScreen";
 import { TICKET_STATUS_REPORT, UNASSIGNED } from "../../Utils/Routes";
-import { Label } from "reactstrap";
+import {
+  ButtonGroup,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Label,
+  UncontrolledDropdown,
+} from "reactstrap";
 import Select from "react-select";
 import { connect } from "react-redux";
 import AXIOS from "../../Utils/AXIOS";
@@ -26,6 +33,8 @@ import {
   ArcElement,
 } from "chart.js";
 import DateRangePickerComponent from "../../components/DateRangePicker/DateRangePicker";
+import constants from "../../Utils/constants";
+// import { requestType } from "../../Utils/constants";
 ChartJS.register(
   BarElement,
   CategoryScale,
@@ -41,6 +50,11 @@ function TktStatusReport(props) {
   const lastTwoWeekAcmlishmnt = useRef(null); // Create a reference to the chart
   const upcomingTasks = useRef(null); // Create a reference to the chart
 
+  const requestType = {
+    1: "SR",
+    2: "NR",
+    3: "CR",
+  };
   const downloadChart = (ref) => {
     const chart = ref.current; // Get the chart instance
     if (chart) {
@@ -92,6 +106,13 @@ function TktStatusReport(props) {
   }, [GraphDateRange]);
 
   const getGraphsData = () => {
+    console.log(
+      "ASdasjndasjd",
+      ` ${AXIOS.defaultPort + AXIOS.ticketsStatusModuleWise}start_date=${
+        GraphDateRange.START_DATE
+      }&end_date=${GraphDateRange.END_DATE}`
+    );
+
     axios
       .get(
         ` ${AXIOS.defaultPort + AXIOS.ticketsStatusModuleWise}start_date=${
@@ -351,6 +372,8 @@ function TktStatusReport(props) {
             response.data.map((val) => {
               tempRes.push({
                 ...val,
+                SUBCATEGORY_NAME: `${val.SUBCATEGORY_NAME}`,
+                REQUEST_TYPE: requestType[val.REQUEST],
                 TOTAL_TICKETS: val.OPEN + val.ISSUE_RECEIPT,
                 IN_PROGRESS: val.OPEN + val.ISSUE_RECEIPT - val.RESOLVED,
               });
@@ -496,9 +519,10 @@ function TktStatusReport(props) {
       name: "Sub Category",
       selector: "SUBCATEGORY_NAME",
     },
+
     {
-      name: "Sub Category ID",
-      selector: "SUB_CATEGORY",
+      name: "Request Type",
+      selector: "REQUEST_TYPE",
     },
 
     {
@@ -523,6 +547,7 @@ function TktStatusReport(props) {
       selector: "IN_PROGRESS",
     },
   ];
+
   const handleExcelExport = () => {
     let excelData = [...Tbody];
 
@@ -565,6 +590,162 @@ function TktStatusReport(props) {
       });
       saveAs(blob, "Ticket Status Report.csv"); // Use the saveAs function to download the CSV file
     }
+  };
+
+  const CsvHeaderTktDetails = [
+    {
+      name: "Ticket ID",
+      selector: "TICKET_ID",
+    },
+    {
+      name: "Reference",
+      selector: "REFERENCE",
+    },
+    {
+      name: "Created By",
+      selector: "CREATED_BY_NAME",
+    },
+    // {
+    //   name: "Created By Contact",
+    //   selector: "CREATED_BY_CONTACT",
+    // },
+    // {
+    //   name: "Created By Email",
+    //   selector: "CREATED_BY_EMAIL",
+    // },
+    {
+      name: "Company Name",
+      selector: "COMPANY_NAME",
+    },
+    {
+      name: "Subject",
+      selector: "SUBJECT",
+    },
+    {
+      name: "Type of Request",
+      selector: "REQUEST_DESCRIPTION",
+    },
+    {
+      name: "Category Name",
+      selector: "CATEGORY_NAME",
+    },
+    {
+      name: "Sub Category Name",
+      selector: "SUB_CATEGORY_NAME",
+    },
+    {
+      name: "Assigned Date",
+      selector: "ASSIGNED_DATE",
+    },
+    {
+      name: "Flag",
+      selector: "FLAG",
+    },
+    {
+      name: "Status",
+      selector: "FLAG",
+    },
+    {
+      name: "Priority",
+      selector: "PRIORITY",
+    },
+    {
+      name: "Pending with",
+      selector: "PENDING_WITH",
+    },
+    {
+      name: "Created Date",
+      selector: "LOGGED_DATE",
+    },
+    {
+      name: "Resolved Date",
+      selector: "RESOLVED_TIME",
+    },
+  ];
+  const handleTktDetailExport = (Type) => {
+    axios
+      .get(
+        `${
+          AXIOS.defaultPort + AXIOS.ticketStatusDetails + formData.CLIENT_ID
+        }&START_DATE=${convertIndianStandardIntoYMD(
+          formData.START_DATE
+        )}&STOP_DATE=${convertIndianStandardIntoYMD(
+          formData.END_DATE
+        )}&TYPE=${Type}`
+      )
+      .then((res) => {
+        let tempResponse = [...res.data];
+
+        tempResponse.map((val) => {
+          if (val.PENDING_WITH_NAME) {
+            val.PENDING_WITH = val.PENDING_WITH_NAME.join(", ");
+          }
+          if (val.CC_EMAIL) {
+            val.CC_EMAIL = val.CC_EMAIL.map((item) => item.EMAIL_ID).join(", ");
+          }
+          if (val.LOGGED_DATE) {
+            val.LOGGED_DATE = new Date(val.LOGGED_DATE).toDateString();
+          }
+          if (val.ASSIGNED_DATE) {
+            val.ASSIGNED_DATE = new Date(val.ASSIGNED_DATE).toDateString();
+          }
+          if (val.RESOLVED_TIME) {
+            val.RESOLVED_TIME = new Date(val.RESOLVED_TIME).toDateString();
+          }
+
+          if (val.PRIORITY) {
+            val.PRIORITY = constants.priorityText[val.PRIORITY];
+          }
+
+          // delete val.PENDING_WITH;
+        });
+
+        let excelData = [...tempResponse];
+
+        console.log("Asdhasdbhjsadasd", excelData);
+
+        if (excelData.length > 0) {
+          // Exclude the "Action" column from csvColumns
+          const csvColumns = CsvHeaderTktDetails.filter(
+            (column) => column.name !== "Action"
+          ).map((column) => column.name);
+
+          const csvRows = excelData.map((item) =>
+            csvColumns.map((columnName) => {
+              const column = CsvHeaderTktDetails.find(
+                (col) => col.name === columnName
+              );
+              if (column) {
+                let cellValue = "";
+                if (typeof column.name === "function") {
+                  cellValue = column.selector(item);
+                } else {
+                  if (column.name == "Status") {
+                    cellValue =
+                      item[column.selector] == true ? "Active" : "Inactive";
+                  } else {
+                    cellValue = item[column.selector] || "";
+                  }
+                }
+                // Wrap cell value in double quotes to handle commas
+                return `"${cellValue}"`;
+              }
+              return ""; // Return an empty value for excluded columns
+            })
+          );
+          const csvContent =
+            csvColumns.join(",") +
+            "\n" +
+            csvRows.map((row) => row.join(",")).join("\n");
+
+          const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8",
+          });
+          saveAs(blob, Type + " Ticket Status Report.csv"); // Use the saveAs function to download the CSV file
+        }
+
+        console.log("ASdasndjksa", tempResponse);
+      });
   };
   return (
     <MainScreen drawerWidth={282} Activekey={TICKET_STATUS_REPORT}>
@@ -683,11 +864,56 @@ function TktStatusReport(props) {
               }}
               className="col adduser-button-style"
             >
-              Search
+              View
             </button>
+            <ButtonGroup>
+              <UncontrolledDropdown>
+                <DropdownToggle
+                  caret
+                  style={{
+                    backgroundColor: "#219bcc",
+                  }}
+                >
+                  Export{" "}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header>Select Export Type</DropdownItem>
+                  <DropdownItem divider />
+
+                  <DropdownItem
+                    onClick={() => {
+                      handleExcelExport();
+                    }}
+                  >
+                    Overall summery
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      handleTktDetailExport("OPEN");
+                    }}
+                  >
+                    Open Tickets detail
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      handleTktDetailExport("ISSUE_RECEIPT");
+                    }}
+                  >
+                    Issue receipt Tickets detail
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      handleTktDetailExport("RESOLVED");
+                    }}
+                  >
+                    Resolved Tickets detail
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </ButtonGroup>
           </div>
           <div style={{ position: "relative" }}>
-            <button
+            {/* <button
               style={{
                 position: "absolute",
                 top: "0px",
@@ -708,7 +934,7 @@ function TktStatusReport(props) {
               }}
             >
               Excel Export
-            </button>
+            </button> */}
           </div>
           {/* <ReactDataTable
             columns={columns}
@@ -717,12 +943,13 @@ function TktStatusReport(props) {
             pageCount={50}
           /> */}
           <TableContainer
+            className="horizontal-scroll-table"
             stickyHeader
             style={{
               marginTop: 50,
             }}
           >
-            <Table aria-label="customized table" stickyHeader> 
+            <Table aria-label="customized table" stickyHeader>
               <TableHead className="scroll-effect-header" stickyHeader>
                 <tr
                   style={{
@@ -765,7 +992,7 @@ function TktStatusReport(props) {
                           color: val.SUB_CATEGORY == "" ? "#fff" : null,
                         }}
                       >
-                        {val.SUBCATEGORY_NAME}
+                        {val.SUBCATEGORY_NAME}- {val.REQUEST_TYPE}
                       </td>
                       <td
                         className="dashboard-td-font"
@@ -906,17 +1133,17 @@ function TktStatusReport(props) {
               ],
             }}
             options={{
-              // plugins: {
-              //   datalabels: {
-              //     anchor: "end", // Anchors the label
-              //     align: "top", // Aligns it to the top
-              //     color: "#000", // Text color
-              //     font: {
-              //       weight: "bold",
-              //     },
-              //     formatter: (value) => value, // Display the value as is
-              //   },
-              // },
+              plugins: {
+                datalabels: {
+                  anchor: "end", // Anchors the label
+                  align: "top", // Aligns it to the top
+                  color: "#000", // Text color
+                  font: {
+                    weight: "bold",
+                  },
+                  formatter: (value) => value, // Display the value as is
+                },
+              },
               scales: {
                 y: {
                   beginAtZero: true,
@@ -979,17 +1206,17 @@ function TktStatusReport(props) {
               ],
             }}
             options={{
-              // plugins: {
-              //   datalabels: {
-              //     anchor: "end", // Anchors the label
-              //     align: "top", // Aligns it to the top
-              //     color: "#000", // Text color
-              //     font: {
-              //       weight: "bold",
-              //     },
-              //     formatter: (value) => value, // Display the value as is
-              //   },
-              // },
+              plugins: {
+                datalabels: {
+                  anchor: "end", // Anchors the label
+                  align: "top", // Aligns it to the top
+                  color: "#000", // Text color
+                  font: {
+                    weight: "bold",
+                  },
+                  formatter: (value) => value, // Display the value as is
+                },
+              },
               scales: {
                 y: {
                   beginAtZero: true,
@@ -1060,17 +1287,17 @@ function TktStatusReport(props) {
               ],
             }}
             options={{
-              // plugins: {
-              //   datalabels: {
-              //     anchor: "end", // Anchors the label
-              //     align: "top", // Aligns it to the top
-              //     color: "#000", // Text color
-              //     font: {
-              //       weight: "bold",
-              //     },
-              //     formatter: (value) => value, // Display the value as is
-              //   },
-              // },
+              plugins: {
+                datalabels: {
+                  anchor: "end", // Anchors the label
+                  align: "top", // Aligns it to the top
+                  color: "#000", // Text color
+                  font: {
+                    weight: "bold",
+                  },
+                  formatter: (value) => value, // Display the value as is
+                },
+              },
               scales: {
                 y: {
                   beginAtZero: true,
