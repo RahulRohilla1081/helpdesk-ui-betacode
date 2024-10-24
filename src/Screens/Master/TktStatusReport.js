@@ -643,7 +643,7 @@ function TktStatusReport(props) {
     },
     {
       name: "Status",
-      selector: "FLAG",
+      selector: "STATUS",
     },
     {
       name: "Priority",
@@ -696,6 +696,11 @@ function TktStatusReport(props) {
           if (val.PRIORITY) {
             val.PRIORITY = constants.priorityText[val.PRIORITY];
           }
+          if (val.STATUS) {
+            val.STATUS =
+              constants.statusFlag.find((item) => item.flag == val.FLAG)
+                .value || "";
+          }
 
           // delete val.PENDING_WITH;
         });
@@ -720,12 +725,7 @@ function TktStatusReport(props) {
                 if (typeof column.name === "function") {
                   cellValue = column.selector(item);
                 } else {
-                  if (column.name == "Status") {
-                    cellValue =
-                      item[column.selector] == true ? "Active" : "Inactive";
-                  } else {
-                    cellValue = item[column.selector] || "";
-                  }
+                  cellValue = item[column.selector] || "";
                 }
                 // Wrap cell value in double quotes to handle commas
                 return `"${cellValue}"`;
